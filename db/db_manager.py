@@ -1,5 +1,4 @@
 import sqlite3
-import os
 
 # Ruta de la base de datos
 DB_PATH = "time_tracker.db"
@@ -146,12 +145,12 @@ def delete_activity(activity_id):
 # CRUD para la tabla 'goals'
 
 
-def create_goal(category_id, hours_meta, week_hours, start_date, end_date):
+def create_goal(category_id, hours_meta, weekly_hours, week_start, week_end):
     conn = sqlite3.connect('time_tracker.db')
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO goals (category_id, hours_meta, weekly_hours, week_start, week_end) VALUES (?, ?, ?, ?, ?)",
-        (category_id, hours_meta, week_hours, start_date, end_date)
+        (category_id, hours_meta, weekly_hours, week_start, week_end)
     )
     conn.commit()
     conn.close()
@@ -237,29 +236,3 @@ def delete_time_log(log_id):
     cursor.execute("DELETE FROM time_logs WHERE id = ?", (log_id,))
     conn.commit()
     conn.close()
-
-
-if __name__ == "__main__":
-    # Llamado a los CRUDs de test.
-    # # Crear categorías
-    # create_category("Salud")
-    # create_category("Trabajo")
-    # print("categories:", read_categories())
-
-    # # Crear metas
-    # create_goal(1, 10, 5, "2024-12-18", "2024-12-24")  # 10 horas para Salud
-    # create_goal(2, 15, 5, "2024-12-18", "2024-12-24")  # 15 horas para Trabajo
-    # print("goals:", read_goals())
-
-    # # Actualizar meta
-    # update_goal(1, 12, "2024-12-18", "2024-12-24")  # Cambiar a 12 horas
-    # print("Metas después de actualizar:", read_goals())
-
-    # # Eliminar una meta
-    # delete_goal(2)  # Eliminar la meta para Trabajo
-    # print("Metas después de eliminar:", read_goals())
-    ##
-    if not os.path.exists(DB_PATH):
-        initialize_db()
-    else:
-        print("La base de datos ya existe.")
